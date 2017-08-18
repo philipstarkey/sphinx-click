@@ -237,8 +237,16 @@ class ClickDirective(Directive):
         # information in their help messages if they so choose.
 
         if ctx.command.help:
+            bar_enabled = False
             for line in statemachine.string2lines(
                     ctx.command.help, tab_width=4, convert_whitespace=True):
+                if line == '\b':
+                    bar_enabled = True
+                    continue
+                elif line == '':
+                    bar_enabled = False
+                
+                line = '| ' + line if bar_enabled else line 
                 result.append(line, source_name)
 
             result.append('', source_name)
